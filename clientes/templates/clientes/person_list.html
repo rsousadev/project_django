@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block title %} Administracao - {{ message }}{% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <div class="col">
+
+        </div>
+
+        <div class="col-6">
+            <h3>Listagem de clientes</h3>
+            <ul class="list-group">
+                {% for person in clientes %}
+                    <li class="list-group-item">
+                        <a href="{% url 'person_detail' person.id %}">{{ person.nome_completo|title }}</a>
+                        {% if user.is_authenticated %}
+                            <div class="trash-item">
+                                <a href="{% url 'persons_update' person.id %}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                                <a href="{% url 'persons_delete' person.id %}">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">{{ "Nenhum cliente cadastrado."|bold_message }}</li>
+                {% endfor %}
+            </ul>
+
+            <br>
+
+            <a href="{% url 'person_new' %}" class="btn btn-primary"> Novo cliente</a>
+
+        </div>
+
+        <div class="col">
+            {% if user.is_authenticated %}
+                <p>Olá {{ user.username }}
+                    <a href="{% url 'logout' %}">
+                        <span class="badge badge-dark">Sair</span>
+                    </a>
+                </p>
+            {% else %}
+                <a href="{% url 'login' %}">
+                    <span class="badge badge-dark">Login</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
